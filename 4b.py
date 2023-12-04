@@ -7,10 +7,10 @@ for index in range(len(lines)):
     count = 0
     line = re.split(' \| |: ', lines[index])
     winning = line[1].split()
-    ours = line[2].split()    
-    for i in ours:
-        if i in winning:
+    ours = line[2].split()
+    for number in ours:
+        if number in winning:
             count += 1
     for i in range(1, count+1):
-        copies[index+i] += 1*copies[index]
+        copies[index+i] += copies[index]
 print(sum(copies))

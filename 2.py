@@ -1,24 +1,17 @@
 import re
 
-file = open('2_input')
-colours = ['red', 'green', 'blue']
-limit = [12, 13, 14]
+with open('2_input') as file:
+    lines = file.read().split('\n')
 total = 0
-fault = False
-for line in file:
-    line = line.strip('\n')
-    line = re.split('; |: |, | ', line)
-    for i in range(len(line)):
-        if i%2 != 0 or i == 0:
-            continue
-        elif int(line[i]) > limit[0] and line[i+1] == colours[0]:
-            fault = True
-        elif int(line[i]) > limit[1] and line[i+1] == colours[1]:
-            fault = True
-        elif int(line[i]) > limit[2] and line[i+1] == colours[2]:
-            fault = True
-    if fault is False:
-        total += int(line[1])
-    else:
-        fault = False
+for line in lines:
+    marbles = {}
+    line = re.split('; |: |, ', line)
+    for index in range(1, len(line)):
+        value, key = line[index].split()
+        if key not in marbles.keys():
+            marbles[key] = [int(value)]
+        else:
+            marbles[key].append(int(value))
+    if max(marbles['red'])<13 and max(marbles['green'])<14 and max(marbles['blue'])<15:
+        total += int(line[0].strip('Game:'))
 print(total)

@@ -1,30 +1,20 @@
 import re
 
-file = open('2_input')
-colours = ['red', 'green', 'blue']
-limit = [12, 13, 14]
+with open('2_input') as file:
+    lines = file.read().split('\n')
 total = 0
-minRed = 0
-minBlue = 0
-minGreen = 0
-fault = False
-for line in file:
-    line = line.strip('\n')
-    line = re.split('; |: |, | ', line)
-    for i in range(len(line)):
-        if i%2 != 0 or i == 0:
-            continue
-        elif line[i+1] == colours[0]:
-            if int(line[i]) > minRed:
-                minRed = int(line[i])
-        elif line[i+1] == colours[1]:
-            if int(line[i]) > minGreen:
-                minGreen = int(line[i])
-        elif line[i+1] == colours[2]:
-            if int(line[i]) > minBlue:
-                minBlue = int(line[i])
+for line in lines:
+    marbles = {}
+    minRed = minGreen = minBlue = 0
+    line = re.split('; |: |, ', line)
+    for index in range(1, len(line)):
+        value, key = line[index].split()
+        if key not in marbles.keys():
+            marbles[key] = [int(value)]
+        else:
+            marbles[key].append(int(value))
+    minRed = max(minRed, max(marbles['red']))
+    minGreen = max(minGreen, max(marbles['green']))
+    minBlue = max(minBlue, max(marbles['blue']))
     total += minRed * minGreen * minBlue
-    minRed = 0
-    minBlue = 0
-    minGreen = 0
-print(total)
+print(total)       
