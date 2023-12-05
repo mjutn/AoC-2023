@@ -1,43 +1,53 @@
+from collections import defaultdict
 class Encoding:
     def __init__(self):
-        self.dest = []
-        self.src = []
-        self.rng = []
-    def append(self, ints):
-        self.dest.append(ints[0])
-        self.src.append(ints[1])
-        self.rng.append(ints[2])
-    def reset(self):
-        self.dest = []
-        self.src = []
-        self.rng = []
-
-def findDest(seed, enc):
-    for index in range(len(enc.dest)):
-        if enc.src[index] <= seed <= enc.src[index]+enc.rng[index]:
-            return enc.dest[index] + seed - enc.src[index]
+        self.dest = defaultdict(list)
+        self.src = defaultdict(list)
+        self.rng = defaultdict(list)
+    def append(self, key, ints):
+        if self.src[key] == []:
+            self.src[key].append(ints[1])
+            self.dest[key].append(ints[0])
+            self.rng[key].append(ints[2])
         else:
-            if index == len(enc.dest)-1:
-                return seed
-            continue
+            for index in range(len(self.src[key])+1):
+                if index == len(self.src[key]):
+                    self.dest[key].append(ints[0])
+                    self.src[key].append(ints[1])
+                    self.rng[key].append(ints[2])
+                    break
+                if self.src[key][index] >= ints[1]:
+                    continue
+                elif self.src[key][index] < ints[1]:
+                    self.dest[key].insert(index, ints[0])
+                    self.src[key].insert(index, ints[1])
+                    self.rng[key].insert(index, ints[2])
+                    break
 
 with open('5_input') as f:
     sections = f.read().split('\n\n')
-
-seeds = sections[0].split()[1:]
-seeds = list(map(int, seeds))
 enc = Encoding()
-
-for section in sections[1:]:
-    lines = section.split('\n')
+for index in range(1,len(sections)):
+    lines = sections[index].split('\n')
     for line in lines:
         line = line.split()
         if not line[0].isdigit():
             continue
         else:
             ints = list(map(int, line))
-            enc.append(ints)
-    for i in range(len(seeds)):
-        seeds[i] = findDest(seeds[i], enc)
-    enc.reset()
-print(min(seeds))
+            enc.append(index, ints)
+low = 99999999999
+seeds = [int(seed) for seed in sections[0].split()[1:]]
+for seed in seeds:
+    for key in enc.src:
+        for index in range(len(enc.src[key])):
+            src = enc.src[key][index]
+            rng = enc.rng[key][index]-1
+            dest = enc.dest[key][index]
+            if seed > src + rng:
+                break
+            if src <= seed <= src + rng:
+                seed = dest-src+seed
+                break 
+    low = min(low, seed)
+print(low)

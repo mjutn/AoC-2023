@@ -26,7 +26,6 @@ class Encoding:
 
 with open('5_input') as f:
     sections = f.read().split('\n\n')
-keys = ['seed', 'soil', 'fert', 'water', 'light', 'temp', 'humid']
 enc = Encoding()
 for index in range(1,len(sections)):
     lines = sections[index].split('\n')
@@ -36,7 +35,7 @@ for index in range(1,len(sections)):
             continue
         else:
             ints = list(map(int, line))
-            enc.append(keys[index-1], ints)
+            enc.append(index, ints)
 
 inputRanges = sections[0].split()[1:]
 inputRanges = list(map(int, inputRanges))
@@ -48,7 +47,7 @@ for i in range(10):
     while seed >= source:
         loc = seed
         skip = loc-source
-        for key in keys:
+        for key in enc.src:
             for index in range(len(enc.src[key])):
                 src = enc.src[key][index]
                 rng = enc.rng[key][index]-1
