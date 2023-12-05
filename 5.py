@@ -21,23 +21,23 @@ def findDest(seed, enc):
                 return seed
             continue
 
-file = open('5_test')
-seeds = file.readline().split()[1:]
+with open('5_input') as f:
+    sections = f.read().split('\n\n')
+
+seeds = sections[0].split()[1:]
 seeds = list(map(int, seeds))
 enc = Encoding()
-file.readline()
 
-for line in file:
-    if not line.strip():
-        break
-    line = line.split()
-    if not line[0].isdigit():
-        continue
-    else:
-        ints = list(map(int, line))
-        enc.append(ints)
-for i in range(len(seeds)):
-    seeds[i] = findDest(seeds[i], enc)
-enc.reset()
-
-print(seeds)
+for section in sections[1:]:
+    lines = section.split('\n')
+    for line in lines:
+        line = line.split()
+        if not line[0].isdigit():
+            continue
+        else:
+            ints = list(map(int, line))
+            enc.append(ints)
+    for i in range(len(seeds)):
+        seeds[i] = findDest(seeds[i], enc)
+    enc.reset()
+print(min(seeds))
