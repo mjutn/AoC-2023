@@ -1,36 +1,33 @@
 file = open('1_input')
 sum = 0
+# Make lists of possible numbers
 writtenNumbers = ['one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
 digits = ['1', '2', '3', '4', '5', '6', '7', '8', '9']
-flag = 0
 for line in file:
+    # init to empty to check whether first or last number has been found
+    first = ''
+    last = ''
     for i in range(len(line)):
-        if line[i].isdigit():
+        if first != '' and last != '':
+            break
+        # if digit easy we done
+        if line[i].isdigit() and first == '':
             first = line[i]
-            break
+        # if not digit check against strings
         for x in range(9):
-            if line[i:(i+len(writtenNumbers[x]))] == writtenNumbers[x]:
+            if line[i:(i+len(writtenNumbers[x]))] == writtenNumbers[x] and first == '':
                 first = digits[x]
-                flag = 1
-        if flag == 1:
-            flag = 0
-            break
-
-    for i in range(len(line)):
-        if line[-i].isdigit() and i != 0:
+        # for the last we do the same, just with reversed indices. -0 is 0 so we gotta skip that one
+        if line[-i].isdigit() and i != 0 and last == '':
             last = line[-i]
-            break
-        if i == len(line)-1:
+        # except after we checked everything else, then it must be at index 0.
+        if i == len(line)-1 and last == '':
             last = line[0]
-            break
+        # check for number strings
         for x in range(9):
-            if line[-(i+len(writtenNumbers[x])):-i] == writtenNumbers[x]:
+            if line[-(i+len(writtenNumbers[x])):-i] == writtenNumbers[x] and last == '':
                 last = digits[x]
-                flag = 1
-        if flag == 1:
-            flag = 0
-            break
-
+    # concatenate the two strings, make number, add up, get result, delete the gym, marry facebook
     sum += int(first + last)
-        
+# i gotta see my man
 print(sum)

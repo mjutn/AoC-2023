@@ -1,4 +1,7 @@
 from collections import defaultdict
+# I put all mappings into one class. The key corresponds to a map, and the integers are the numbers.
+# destination, source, range.
+# I sort by source, so that it is easier to see where the input compares to the mapping.
 class Encoding:
     def __init__(self):
         self.dest = defaultdict(list)
@@ -31,16 +34,21 @@ for index in range(1,len(sections)):
     lines = sections[index].split('\n')
     for line in lines:
         line = line.split()
+        # ignore the lines without useful information
         if not line[0].isdigit():
             continue
         else:
+            # put the maps into my data structure
             ints = list(map(int, line))
             enc.append(index, ints)
 low = 99999999999
+# first line is the seeds we take through the mapping
 seeds = [int(seed) for seed in sections[0].split()[1:]]
 for seed in seeds:
     for key in enc.src:
         for index in range(len(enc.src[key])):
+            # verify if the seed is within the range, or higher than the highest
+            # range - 1 as it includes the src itself as a number.
             src = enc.src[key][index]
             rng = enc.rng[key][index]-1
             dest = enc.dest[key][index]
@@ -50,4 +58,5 @@ for seed in seeds:
                 seed = dest-src+seed
                 break 
     low = min(low, seed)
+# i gotta see my man
 print(low)
