@@ -3,9 +3,7 @@ from math import lcm
 with open('8_input') as file:
     lines = file.read().split('\n')
 distances = []
-# take all lines which start with three characters ending on A
 ghosts = [re.split('\W+',s)[0] for s in lines[2:] if s[2] == 'A']
-# take all lines which start with three characters ending on Z
 destinations = [re.split('\W+',s)[0] for s in lines[2:] if s[2] == 'Z']
 for ghost in ghosts:
     steps = 0
