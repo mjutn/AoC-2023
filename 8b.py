@@ -10,7 +10,7 @@ for ghost in ghosts:
     while ghost not in destinations:
         for instruction in lines[0]:
             steps += 1
-            locations = [re.split('\W+', line[0]) for line in lines if line.startswith(ghost)]
+            locations = [re.split('\W+',line) for line in lines if line.startswith(ghost)][0]
             if instruction == 'R':
                 ghost = locations[2]
             elif instruction == 'L':
