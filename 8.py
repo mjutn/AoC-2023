@@ -19,4 +19,3 @@ while location != 'ZZZ':
         if location == 'ZZZ':
             break
 print(steps)
-        

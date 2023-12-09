@@ -1,11 +1,7 @@
 import re
-
 file = open('3_input')
 lines = []
 total = 0
-# in order to get rid of annoying edge cases, 
-# append a . before and after string, 
-# and insert line of dots above and below
 for line in file:
     lines.append('.'+ line.strip('\n') + '.')
 width = len(lines[0])

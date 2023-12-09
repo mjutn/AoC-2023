@@ -1,7 +1,4 @@
 from collections import defaultdict
-# I put all mappings into one class. The key corresponds to a map, and the integers are the numbers.
-# destination, source, range.
-# I sort by source, so that it is easier to see where the input compares to the mapping.
 class Encoding:
     def __init__(self):
         self.dest = defaultdict(list)

@@ -1,5 +1,4 @@
 import re
-
 with open('2_input') as file:
     lines = file.read().split('\n')
 total = 0
