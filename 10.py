@@ -10,16 +10,12 @@ cur = s
 seen = [cur]
 if text[s-1] in leftChars:
     cur = s-1
-    seen.append(cur)
 elif text[s+1] in rightChars:
     cur = s+1
-    seen.append(cur)
 elif text[s-linelength] in upChars:
     cur = s-linelength
-    seen.append(cur)
 elif text[s+linelength] in downChars:
     cur = s+linelength
-    seen.append(cur)
 prev = s
 while cur != s:
     seen.append(cur)
