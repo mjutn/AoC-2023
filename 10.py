@@ -1,64 +1,47 @@
 with open('10_input') as file:
-    text = file.read()
-    s = text.index('S')
-    linelength = text.index('\n')+1
-leftChars = ['-','F', 'L']
-rightChars = ['-', '7', 'J']
-upChars = ['|', '7', 'F']
-downChars = ['|', 'J', 'L']
+    lines = file.read().split('\n')
+
+chars = {
+    'L':[0,1],
+    '|':[0,2],
+    'J':[0,3],
+    'F':[1,2],
+    '-':[1,3],
+    '7':[2,3]
+}
+
+dirs = [
+    (0,-1), # up    ^
+    (1,0),  # right >
+    (0,1),  # down  v
+    (-1,0)  # left  <
+]
+
+def find_s(lines):
+    for y, line in enumerate(lines):
+        x = line.find('S')
+        if x != -1:
+            return (x,y)
+
+def walk(lines, cur, dir):
+    new = (cur[0]+dirs[dir][0], cur[1]+dirs[dir][1])
+    if new == s:
+        return new, dir
+    connections = chars[lines[new[1]][new[0]]]
+    if connections[0] == (dir-2)%4:
+        dir = connections[1]
+    else:
+        dir = connections[0]
+    return new, dir
+
+global s
+s = find_s(lines)
 cur = s
-seen = [cur]
-if text[s-1] in leftChars:
-    cur = s-1
-elif text[s+1] in rightChars:
-    cur = s+1
-elif text[s-linelength] in upChars:
-    cur = s-linelength
-elif text[s+linelength] in downChars:
-    cur = s+linelength
-prev = s
-while cur != s:
-    seen.append(cur)
-    if text[cur] == '|':
-        if prev == cur - linelength:
-            prev = cur
-            cur = cur + linelength
-        else:
-            prev = cur
-            cur = cur - linelength
-    elif text[cur] == '-':
-        if prev == cur-1:
-            prev = cur
-            cur = cur+1
-        else:
-            prev = cur
-            cur = cur-1
-    elif text[cur] == '7':
-        if prev == cur - 1:
-            prev = cur
-            cur = cur + linelength
-        else:
-            prev = cur
-            cur = cur - 1
-    elif text[cur] == 'J':
-        if prev == cur - 1:
-            prev = cur
-            cur = cur - linelength
-        else:
-            prev = cur
-            cur = cur - 1
-    elif text[cur] == 'F':
-        if prev == cur + linelength:
-            prev = cur
-            cur = cur + 1
-        else:
-            prev = cur
-            cur = cur + linelength
-    elif text[cur] == 'L':
-        if prev == cur - linelength:
-            prev = cur
-            cur = cur + 1
-        else:
-            prev = cur
-            cur = cur - linelength
-print(int(len(seen)/2))
+dir = 0
+count = 0
+while True:
+    count += 1
+    cur, dir = walk(lines, cur, dir)
+    if cur == s:
+        break
+print(int(count/2))
