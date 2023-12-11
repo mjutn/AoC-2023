@@ -21,27 +21,27 @@ def find_s(lines):
     for y, line in enumerate(lines):
         x = line.find('S')
         if x != -1:
-            return (x,y)
+            return x,y
 
-def walk(lines, cur, dir):
-    new = (cur[0]+dirs[dir][0], cur[1]+dirs[dir][1])
-    if new == s:
-        return new, dir
-    connections = chars[lines[new[1]][new[0]]]
+def walk(lines, x, y, dir):
+    newx, newy = x+dirs[dir][0], y+dirs[dir][1]
+    if newx == sx and newy == sy:
+        return newx, newy, dir
+    connections = chars[lines[newy][newx]]
     if connections[0] == (dir-2)%4:
         dir = connections[1]
     else:
         dir = connections[0]
-    return new, dir
+    return newx, newy, dir
 
-global s
-s = find_s(lines)
-cur = s
+global sx, sy
+sx,sy = find_s(lines)
+x, y = sx, sy
 dir = 0
 count = 0
 while True:
     count += 1
-    cur, dir = walk(lines, cur, dir)
-    if cur == s:
+    x, y, dir = walk(lines, x, y, dir)
+    if x == sx and y == sy:
         break
 print(int(count/2))
