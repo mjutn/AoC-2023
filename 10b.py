@@ -79,7 +79,6 @@ def beams(lines,seen):
         lines[idx] = line
     return ''.join(lines)
         
-
 global sx,sy
 sx, sy = find_s(lines)
 x, y = sx, sy
